@@ -7,8 +7,8 @@ module.exports = {
     try {
       const users = await usersModel.find();
       res.send(users)
-    } catch (error) {
-      console.log("error: ", error)
+    } catch (e) {
+      next(e)
     }
   },
 
@@ -16,8 +16,8 @@ module.exports = {
     try {
       const user = await usersModel.findById(req.params.id)
       res.json(user);
-    } catch (error) {
-      console.log("error: ", error)
+    } catch (e) {
+      next(e)
     }
   },
 
@@ -28,13 +28,13 @@ module.exports = {
         {
           name: req.body.name,
           email: req.body.email
-
-
         }
       )
       const document = await user.save()
       res.json(document)
-    } catch (error) { console.log("error: ", error) }
+    } catch (e) {
+      next(e)
+    }
 
   },
 
@@ -42,13 +42,17 @@ module.exports = {
     try {
       const user = await usersModel.updateOne({ _id: req.params.id }, req.body)
       res.json(user)
-    } catch (error) { console.log("error: ", error) }
+    } catch (e) {
+      next(e)
+    }
   },
 
   delete: async function (req, res, next) {
     try {
       const user = await usersModel.deleteOne({ _id: req.params.id })
       res.json(user)
-    } catch (error) { console.log("error: ", error) }
+    } catch (e) {
+      next(e)
+    }
   }
 }

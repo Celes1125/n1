@@ -6,8 +6,8 @@ module.exports = {
     try {
       const products = await productsModel.find();
       res.send(products)
-    } catch (error) {
-      console.log("error: ", error)
+    } catch (e) {
+      next(e)
     }
   },
 
@@ -15,8 +15,8 @@ module.exports = {
     try {
       const product = await productsModel.findById(req.params.id)
       res.json(product)
-    } catch (error) {
-      console.log("error: ", error)
+    } catch (e) {
+      next(e)
     }
   },
 
@@ -33,14 +33,18 @@ module.exports = {
       )
       const document = await product.save()
       res.json(document)
-    } catch (error) { console.log("error: ", error) }
+    } catch (e) {
+      next(e)
+    }
   },
 
   update: async function (req, res, next) {
     try {
       const product = await productsModel.updateOne({ _id: req.params.id }, req.body)
       res.json(product)
-    } catch (error) { console.log("error: ", error) }
+    } catch (e) {
+      next(e)
+    }
 
   },
 
@@ -48,7 +52,9 @@ module.exports = {
     try {
       const product = await productsModel.deleteOne({ _id: req.params.id })
       res.json(product)
-    } catch (error) { console.log("error: ", error) }
+    } catch (e) {
+      next(e)
+    }
 
   }
 }
