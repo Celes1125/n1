@@ -1,10 +1,11 @@
 
 const productsModel = require('../models/productsModel')
+const categoriesModel = require('../models/categoriesModel')
 
 module.exports = {
   getAll: async function (req, res, next) {
     try {
-      const products = await productsModel.find();
+      const products = await productsModel.find().populate("category")
       res.send(products)
     } catch (e) {
       next(e)
@@ -27,7 +28,8 @@ module.exports = {
         {
           name: req.body.name,
           price: req.body.price,
-          sku: req.body.sku
+          sku: req.body.sku,
+          category: req.body.categoryId
 
         }
       )
