@@ -1,11 +1,11 @@
 
-const productsModel = require('../models/productsModel')
+const categoriesModel = require('../models/categoriesModel')
 
 module.exports = {
   getAll: async function (req, res, next) {
     try {
-      const products = await productsModel.find();
-      res.send(products)
+      const categories = await categoriesModel.find();
+      res.send(categories)
     } catch (e) {
       next(e)
     }
@@ -13,8 +13,8 @@ module.exports = {
 
   getById: async function (req, res, next) {
     try {
-      const product = await productsModel.findById(req.params.id)
-      res.json(product)
+      const categories = await categoriesModel.findById(req.params.id)
+      res.json(categories)
     } catch (e) {
       next(e)
     }
@@ -23,15 +23,15 @@ module.exports = {
   create: async function (req, res, next) {
     try {
       console.log(req.body);
-      const product = new productsModel(
+      const category = new categoriesModel(
         {
           name: req.body.name,
-          price: req.body.price,
-          sku: req.body.sku
+          color: req.body.color,
+          controlNumber: req.body.controlNumber
 
         }
       )
-      const document = await product.save()
+      const document = await category.save()
       res.json(document)
     } catch (e) {
       next(e)
@@ -40,8 +40,8 @@ module.exports = {
 
   update: async function (req, res, next) {
     try {
-      const product = await productsModel.updateOne({ _id: req.params.id }, req.body)
-      res.json(product)
+      const category = await categoriesModel.updateOne({ _id: req.params.id }, req.body)
+      res.json(category)
     } catch (e) {
       next(e)
     }
@@ -51,8 +51,8 @@ module.exports = {
   delete: async function (req, res, next) {
     try {
       console.log(req.body.id)      
-      const product = await productsModel.deleteOne({ _id: req.params.id })
-      res.json(product)
+      const category = await categoriesModel.deleteOne({ _id: req.params.id })
+      res.json(category)
     } catch (e) {
       next(e)
     }
