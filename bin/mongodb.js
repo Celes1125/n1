@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require ('mongoose-paginate')
 
 async function connectToMongoDB() {
   try {
@@ -11,5 +12,12 @@ async function connectToMongoDB() {
 }
 
 connectToMongoDB();
+
+mongoosePaginate.paginate.options={
+  limit:1,
+  lean:false
+}
+
+mongoose.mongoosePaginate = mongoosePaginate;
 
 module.exports = mongoose;

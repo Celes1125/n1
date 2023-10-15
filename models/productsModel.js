@@ -29,6 +29,7 @@ const productsSchema = new mongoose.Schema(
     }
 )
 
-productsSchema.virtual("priceCurrency").get(function () { return "$" + this.price })
-productsSchema.set("toJSON", { getters: true, setters: true, virtuals: true })
+productsSchema.virtual("priceCurrency").get(function () { return "$" + this.price });
+productsSchema.set("toJSON", { getters: true, setters: true, virtuals: true });
+productsSchema.plugin(mongoose.mongoosePaginate);
 module.exports = mongoose.model("products", productsSchema);
