@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const jwt = require('jsonwebtoken')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -25,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/products', productsRouter);
+app.use('/products', validateUser, productsRouter);
 app.use('/categories', categoriesRouter);
 
 
@@ -46,5 +47,19 @@ app.use(function(err, req, res, next) {
   res.json ({ "error" : true, "message" : err.message})
   // res.render('error');
 });
+
+function validateUser ( req, res, next ) {
+  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function (err, decoded) {
+    if(err){
+      res.json( {message: err.message})
+    }else{
+      console.log("decoded: ", decoded)
+      next()
+    }
+
+  })
+}
+
+
 
 module.exports = app;
