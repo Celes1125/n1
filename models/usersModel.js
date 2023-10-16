@@ -1,6 +1,7 @@
 const mongoose = require('../bin/mongodb')
 const errorMessages = require('../utils/errorMessages')
 const validators = require('../utils/validators')
+const bcrypt = require('bcrypt')
 
 const usersSchema = new mongoose.Schema(
     {
@@ -34,4 +35,8 @@ const usersSchema = new mongoose.Schema(
     }
 )
 
+usersSchema.pre("save", function (next){
+    this.password = bcrypt.hashSync(this.password, 10)
+    next()
+})
 module.exports = mongoose.model("users", usersSchema);

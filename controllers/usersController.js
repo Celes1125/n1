@@ -1,5 +1,7 @@
-const usersModel = require('../models/usersModel')
-
+const { JsonWebTokenError } = require('jsonwebtoken');
+const usersModel = require('../models/usersModel');
+const bcrypt =  require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
 
@@ -15,7 +17,11 @@ module.exports = {
   getById: async function (req, res, next) {
     try {
       const user = await usersModel.findById(req.params.id)
-      res.json(user);
+      if(!user){
+        res.json({message: "email incorrecto"})
+        return
+      }
+
     } catch (e) {
       next(e)
     }
@@ -40,16 +46,18 @@ module.exports = {
 
   login: async function (req, res, next) {
     try {
-
-      const user = new usersModel(
-        {
-          name: req.body.name,
-          email: req.body.email,
-          password: req.body.password
-        }
-      )
-      const document = await user.save()
-      res.json(document)
+      const user = await usersModel.findOne({email: req.body.email})
+      if(!user){
+        res.json({message:"email incorrecto"})
+        return
+      }
+      if(bcrypt.compareSync(req.body.password, user.password)) {
+        const token = jwt.sign({ userId: user._id}, req.app.get('secretKey'), { expiresIn: "1h"})
+        res.json( { token: token})
+      }else{
+        res.json( { message: "contraseña incorrecta"})
+        return
+      }
     } catch (e) {
       next(e)
     }
