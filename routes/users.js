@@ -13,6 +13,6 @@ router.post('/login', usersController.login)
 
 router.put('/:id', usersController.update);
 
-router.delete('/:id', usersController.delete);
+router.delete('/:id', (req,res,next) => { req.app.validateUser (req, res, next) },usersController.delete);
 
 module.exports = router;
